@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerThread implements Runnable{
 	
@@ -12,11 +13,13 @@ public class ServerThread implements Runnable{
 	private Socket incoming;
 	private PrintWriter writer;
 	private Scanner reader;
+	private CopyOnWriteArrayList<ServerThread> threadList;
 	//private ServerSender sender;
 	
-	public ServerThread(Socket incoming, ArrayBlockingQueue<String> arrayBlockingQueue) {
+	public ServerThread(Socket incoming, ArrayBlockingQueue<String> arrayBlockingQueue, CopyOnWriteArrayList<ServerThread> threadList) {
 		this.arrayBlockingQueue = arrayBlockingQueue;
 		this.incoming = incoming;
+		this.threadList = threadList;
 	}
 	
 	@Override
@@ -30,16 +33,20 @@ public class ServerThread implements Runnable{
 		
 		boolean done = false;
 		while(!done){
-			String msg = reader.nextLine();
-			if(msg.trim().toUpperCase().equals("END"))
-				done = true;
-			else{
-				//System.out.println(msg);
-				try {
-					arrayBlockingQueue.put(msg);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			if(reader.hasNext()){
+				String msg = reader.nextLine();
+				if(msg.trim().toUpperCase().equals("END")){
+					done = true;
+					threadList.remove(this);
+				}
+				else{
+					//System.out.println(msg);
+					try {
+						arrayBlockingQueue.put(msg);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}

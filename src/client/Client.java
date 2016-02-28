@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.concurrent.locks.Lock;
 
 public class Client {
 	private String login;
@@ -20,17 +21,22 @@ public class Client {
 		Scanner reader = new Scanner(socket.getInputStream());
 		Scanner input = new Scanner(System.in);
 		
-		Thread t = new Thread(new ClientReader(reader));
+		boolean done = false;
+		
+		ClientReader cr = new ClientReader(reader, done);
+		Thread t = new Thread(cr);
 		t.start();
 		
 		//Przeslanie loginu do serwera
 		writer.println(login + " : dolaczyl do czatu");
 		
-		boolean done = false;
 		while(!done){
 			String msg = input.nextLine();
-			if(msg.trim().toUpperCase().equals("END"))
+			if(msg.trim().toUpperCase().equals("END")){
 				done = true;
+				msg = "Zakonczyl czat";
+				cr.setDone(true);
+			}
 			writer.println(login + " : " + msg);
 		}
 		socket.close();

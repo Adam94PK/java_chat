@@ -26,7 +26,7 @@ public class Server {
 		
 		while(true){
 			socket = serverSocket.accept();
-			ServerThread st = new ServerThread(socket, arrayBlockingQueue);
+			ServerThread st = new ServerThread(socket, arrayBlockingQueue, threadList);
 			Thread t = new Thread(st);
 			t.start();
 			threadList.add(st);
