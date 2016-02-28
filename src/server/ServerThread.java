@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,10 +14,10 @@ public class ServerThread implements Runnable{
 	private Socket incoming;
 	private PrintWriter writer;
 	private Scanner reader;
-	private CopyOnWriteArrayList<ServerThread> threadList;
+	private ArrayList<ServerThread> threadList;
 	//private ServerSender sender;
 	
-	public ServerThread(Socket incoming, ArrayBlockingQueue<String> arrayBlockingQueue, CopyOnWriteArrayList<ServerThread> threadList) {
+	public ServerThread(Socket incoming, ArrayBlockingQueue<String> arrayBlockingQueue, ArrayList<ServerThread> threadList) {
 		this.arrayBlockingQueue = arrayBlockingQueue;
 		this.incoming = incoming;
 		this.threadList = threadList;

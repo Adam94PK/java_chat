@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class ClientReader implements Runnable{
 	private Scanner scaner;
 	private boolean done;
-	public ClientReader(Scanner scanner, boolean done) {
+	public ClientReader(Scanner scanner) {
 		this.scaner = scanner;
 		this.done = done;
 	}

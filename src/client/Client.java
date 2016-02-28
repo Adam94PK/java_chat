@@ -21,15 +21,14 @@ public class Client {
 		Scanner reader = new Scanner(socket.getInputStream());
 		Scanner input = new Scanner(System.in);
 		
-		boolean done = false;
-		
-		ClientReader cr = new ClientReader(reader, done);
+		ClientReader cr = new ClientReader(reader);
 		Thread t = new Thread(cr);
 		t.start();
 		
 		//Przeslanie loginu do serwera
 		writer.println(login + " : dolaczyl do czatu");
 		
+		boolean done = false;
 		while(!done){
 			String msg = input.nextLine();
 			if(msg.trim().toUpperCase().equals("END")){

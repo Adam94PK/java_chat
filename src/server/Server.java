@@ -12,13 +12,13 @@ public class Server {
 	private ServerSocket serverSocket;
 	private Socket socket;
 	private ArrayBlockingQueue<String> arrayBlockingQueue;
-	private CopyOnWriteArrayList<ServerThread> threadList;
+	private ArrayList<ServerThread> threadList;
 	private ServerSender sender;
 	
 	public Server() throws IOException{
 		serverSocket = new ServerSocket(8989);
 		arrayBlockingQueue = new ArrayBlockingQueue<String>(10);
-		threadList = new CopyOnWriteArrayList<ServerThread>();
+		threadList = new ArrayList<ServerThread>();
 		sender = new ServerSender(arrayBlockingQueue, threadList);
 	}
 	
